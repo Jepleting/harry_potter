@@ -1,22 +1,40 @@
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
-const getCharacters = async () => {
-  try {
-    const response = await axios.get('https://hp-api.onrender.com/')
-    if (response.status !== 200) {
-      throw new Error('Server Error')
-    }
-    return response.data
-
-  } catch (error) {
-  
-    // This error will be passed to the 'error' field in the 'status' object returned by `useQuery`
-    throw new Error('Error fetching characters: ' + (error as Error).message);
-  }
+export interface Character {
+  id: string;
+  name: string;
+  alternate_names: string[];
+  species: string;
+  gender: string;
+  house: string;
+  dateOfBirth: string;
+  yearOfBirth: number;
+  wizard: boolean;
+  ancestry: string;
+  eyeColour: string;
+  hairColour: string;
+  wand: {
+    wood: string;
+    core: string;
+    length: number;
+  };
+  patronus: string;
+  hogwartsStudent: boolean;
+  hogwartsStaff: boolean;
+  actor: string;
+  alternate_actors: string[];
+  alive: boolean;
+  image: string;
+  // ... add other properties as needed
 }
 
-// The query function uses the error message returned by getCharacters()
+
+const getCharacters = async () => {
+  const { data } = await axios.get('https://hp-api.onrender.com/')
+  return data
+}
+
 export const useCharacters = () => {
   return useQuery('characters', getCharacters)
 }
